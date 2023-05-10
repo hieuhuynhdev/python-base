@@ -23,10 +23,6 @@ RUN npm i
 # --- dataFiles/
 # --- service_keys/
 # --- services/
-# --- .env
-# --- launcher.js
 COPY ./dataFiles ./dataFiles
 COPY ./service_keys ./service_keys
 COPY ./services ./services
-COPY ./.env ./.env
-COPY ./launcher.js ./launcher.js

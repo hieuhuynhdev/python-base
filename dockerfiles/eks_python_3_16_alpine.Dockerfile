@@ -22,10 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # --- dataFiles/
 # --- service_keys/
 # --- services/
-# --- .env
-# --- launcher.js
 COPY ./dataFiles ./dataFiles
 COPY ./service_keys ./service_keys
 COPY ./services ./services
-COPY ./.env ./.env
 
