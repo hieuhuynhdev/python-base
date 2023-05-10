@@ -1,0 +1,86 @@
+# ========================================================================================
+# List Github secrets with sample values:
+#   Secret variables                            Sample values                  Description
+#   --------------------------------------------------------------------------------------
+#   STAGING_APP_ENV                             NODE_ENV=staging
+#
+#   STAGING_APPLE_KEY
+#   STAGING_APPLE_KEY_FILE_NAME
+#
+#   STAGING_GOOGLE_FIREBASE_KEY
+#   STAGING_GOOGLE_FIREBASE_KEY_FILE_NAME
+#
+#   STAGING_GOOGLE_DIALOGFLOW_KEY
+#   STAGING_GOOGLE_DIALOGFLOW_KEY_FILE_NAME
+#
+#   CR_PAT
+#
+# Deployment flow:
+#   1. Pull latest source code
+#   2. Validate source code
+#   3. Build and push image
+# ========================================================================================
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: true
+        default: 1-staging
+
+env:
+  PYTHON_VERSION: '3.11'
+  APP_ENV: ${{ secrets.STAGING_APP_ENV }}
+
+  APPLE_KEY: ${{ secrets.STAGING_APPLE_KEY }}
+  APPLE_KEY_FILE_NAME: ${{ secrets.STAGING_APPLE_KEY_FILE_NAME }}
+  APPLE_KEY_DIST_PATH: ./service_keys/apple
+
+  GOOGLE_FIREBASE_KEY: ${{ secrets.STAGING_GOOGLE_FIREBASE_KEY }}
+  GOOGLE_FIREBASE_KEY_FILE_NAME: ${{ secrets.STAGING_GOOGLE_FIREBASE_KEY_FILE_NAME }}
+  GOOGLE_DIALOGFLOW_KEY: ${{ secrets.STAGING_GOOGLE_DIALOGFLOW_KEY }}
+  GOOGLE_DIALOGFLOW_KEY_FILE_NAME: ${{ secrets.STAGING_GOOGLE_DIALOGFLOW_KEY_FILE_NAME }}
+  GOOGLE_KEY_DIST_PATH: ./service_keys/google
+
+  CR_PAT: ${{ secrets.CR_PAT }}
+  IMAGE_TAG: ${{ github.event.inputs.version }}
+
+name: Manual Build STAGING python base image
+
+jobs:
+  main:
+    name: Build image version ghcr.io/oneamo/python_base:${{ github.event.inputs.version }}
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Step 1: Pull source code and install dependencies
+      - name: Pull source code and install dependencies
+        uses: oneamo/backend/.github/actions/pull-source-and-install-dependencies@main
+        with:
+          BRANCH_NAME: ${{ github.ref_name }}
+          NODE_VERSION: ${{ env.NODE_VERSION }}
+          APP_ENV: ${{ env.APP_ENV }}
+          APPLE_KEY_DIST_PATH: ${{ env.APPLE_KEY_DIST_PATH }}
+          APPLE_KEY_FILE_NAME: ${{ env.APPLE_KEY_FILE_NAME }}
+          APPLE_KEY: ${{ env.APPLE_KEY }}
+          GOOGLE_KEY_DIST_PATH: ${{ env.GOOGLE_KEY_DIST_PATH }}
+          GOOGLE_FIREBASE_KEY_FILE_NAME: ${{ env.GOOGLE_FIREBASE_KEY_FILE_NAME }}
+          GOOGLE_FIREBASE_KEY: ${{ env.GOOGLE_FIREBASE_KEY }}
+          GOOGLE_DIALOGFLOW_KEY_FILE_NAME: ${{ env.GOOGLE_DIALOGFLOW_KEY_FILE_NAME }}
+          GOOGLE_DIALOGFLOW_KEY: ${{ env.GOOGLE_DIALOGFLOW_KEY }}
+
+      # Step 2: Validate source code
+      - name: Validate source code
+        uses: ./.github/actions/validate-source-code
+      
+      # Step 3: Build and push image
+      - name: Build and push image
+        id: docker-image
+        uses: ./.github/actions/build-and-push-image
+        with:
+          USERNAME: ${{ github.repository_owner }}
+          PASSWORD: ${{ env.CR_PAT }}
+          IMAGE: python_base:${{ env.IMAGE_TAG }}
+          DOCKERFILE: ./dockerfiles/eks_python_3_16_alpine.Dockerfile
+

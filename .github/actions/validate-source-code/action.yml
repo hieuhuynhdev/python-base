@@ -1,0 +1,21 @@
+# =============================================================================
+# This action will be run when new pull request created or new commits pushed
+#
+# Deployment flow:
+#   1. Pre-Deployment checklist
+#   2. Run eslint
+#   3. Run test
+#   4. Set python version
+# =============================================================================
+
+name: Validate source code action
+
+runs:
+  using: 'composite'
+  steps:
+    # Step 4: Python version
+    - name: Use Python v3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'

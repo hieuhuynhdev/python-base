@@ -1,0 +1,52 @@
+# =============================================================================
+#
+# Inputs:
+#   Variable name                     Sample value                  Description
+#   ---------------------------------------------------------------------------
+#   BRANCH_NAME                       main
+#   NODE_VERSION                      14.18.1
+#   APP_ENV                           NODE_ENV=staging
+#
+#   APPLE_KEY_DIST_PATH               /path/to/apple-key
+#   APPLE_KEY_FILE_NAME               apple-key
+#   APPLE_KEY
+#
+#   GOOGLE_KEY_DIST_PATH               /path/to/goole-key
+#   GOOGLE_FIREBASE_KEY_FILE_NAME      firebase-key
+#   GOOGLE_FIREBASE_KEY
+#   GOOGLE_DIALOGFLOW_KEY_FILE_NAME     dialogflow-key
+#   GOOGLE_DIALOGFLOW_KEY
+#
+# Steps:
+#   1. Pull latest source code
+#   2. Set nodejs version
+#   3. Install node modules: npm ci
+#   4. Create env
+#   5. Create service keys
+#   6. Set python version
+# =============================================================================
+
+name: Pull source code and install dependencies action
+
+inputs:
+  BRANCH_NAME:
+    description: "BRANCH_NAME"
+    default: ""
+  PYTHON_VERSION:
+    description: "PYTHON_VERSION"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    # Step 1: Git pull
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.BRANCH_NAME }}
+
+    # Step 6: PYTHON version
+    - name: Use Python ${{ inputs.PYTHON_VERSION }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        cache: "pip"
