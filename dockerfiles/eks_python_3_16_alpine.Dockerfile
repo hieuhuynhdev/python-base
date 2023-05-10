@@ -7,11 +7,6 @@ RUN npm install -g nodemon > /dev/null
 
 # Create folder /amo
 RUN mkdir /amo
-RUN chown node /amo
-
-# Run server as non-privileged
-# `node` user can read/write on local
-USER python
 WORKDIR /amo
 
 # Copy requirements.txt and install
