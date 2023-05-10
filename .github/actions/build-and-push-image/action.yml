@@ -20,27 +20,27 @@ name: Build static files action
 
 inputs:
   USERNAME:
-    description: 'USERNAME'
+    description: "USERNAME"
     required: true
   PASSWORD:
-    description: 'PASSWORD'
+    description: "PASSWORD"
     required: true
   IMAGE:
-    description: 'IMAGE'
+    description: "IMAGE"
     required: true
   DOCKERFILE:
-    description: 'DOCKERFILE'
-    default: './dockerfiles/eks_node_14_15_1_alpine_x86.Dockerfile'
+    description: "DOCKERFILE"
+    default: "./dockerfiles/eks_node_14_15_1_alpine_x86.Dockerfile"
   CACHE_FROM:
-    description: 'CACHE_FROM'
+    description: "CACHE_FROM"
 
 outputs:
   image:
-    description: 'Image name'
+    description: "Image name"
     value: ghcr.io/oneamo/${{ inputs.IMAGE }}
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     # Step 1: Login
     - name: Login to Registry
@@ -56,7 +56,7 @@ runs:
       with:
         context: .
         file: ${{ inputs.DOCKERFILE }}
-        tags: ghcr.io/oneamo/${{ inputs.IMAGE }}
+        tags: ghcr.io/hieuhuynhdev/${{ inputs.IMAGE }}
         push: true
-        cache-from: type=registry,ref=ghcr.io/oneamo/${{ inputs.CACHE_FROM }}
+        cache-from: type=registry,ref=ghcr.io/hieuhuynhdev/${{ inputs.CACHE_FROM }}
         cache-to: type=inline
