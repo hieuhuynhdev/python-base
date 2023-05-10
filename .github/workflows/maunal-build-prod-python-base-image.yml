@@ -46,7 +46,7 @@ jobs:
     steps:
       # Step 1: Pull source code and install dependencies
       - name: Pull source code and install dependencies
-        uses: oneamo/backend/.github/actions/pull-source-and-install-dependencies@main
+        uses: hieuhuynhdev/python-base/.github/actions/pull-source-and-install-dependencies@main
         with:
           BRANCH_NAME: ${{ github.ref_name }}
           PYTHON_VERSION: ${{ env.PYTHON_VERSION }}
