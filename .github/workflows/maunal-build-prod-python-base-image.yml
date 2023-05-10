@@ -33,16 +33,6 @@ env:
   PYTHON_VERSION: '3.11'
   APP_ENV: ${{ secrets.PROD_V3_APP_ENV }}
 
-  APPLE_KEY: ${{ secrets.PROD_APPLE_KEY }}
-  APPLE_KEY_FILE_NAME: ${{ secrets.PROD_APPLE_KEY_FILE_NAME }}
-  APPLE_KEY_DIST_PATH: ./service_keys/apple
-
-  GOOGLE_FIREBASE_KEY: ${{ secrets.PROD_GOOGLE_FIREBASE_KEY }}
-  GOOGLE_FIREBASE_KEY_FILE_NAME: ${{ secrets.PROD_GOOGLE_FIREBASE_KEY_FILE_NAME }}
-  GOOGLE_DIALOGFLOW_KEY: ${{ secrets.PROD_GOOGLE_DIALOGFLOW_KEY }}
-  GOOGLE_DIALOGFLOW_KEY_FILE_NAME: ${{ secrets.PROD_GOOGLE_DIALOGFLOW_KEY_FILE_NAME }}
-  GOOGLE_KEY_DIST_PATH: ./service_keys/google
-
   CR_PAT: ${{ secrets.CR_PAT }}
   IMAGE_TAG: ${{ github.event.inputs.version }}
 
@@ -59,16 +49,8 @@ jobs:
         uses: oneamo/backend/.github/actions/pull-source-and-install-dependencies@main
         with:
           BRANCH_NAME: ${{ github.ref_name }}
-          NODE_VERSION: ${{ env.NODE_VERSION }}
+          PYTHON_VERSION: ${{ env.PYTHON_VERSION }}
           APP_ENV: ${{ env.APP_ENV }}
-          APPLE_KEY_DIST_PATH: ${{ env.APPLE_KEY_DIST_PATH }}
-          APPLE_KEY_FILE_NAME: ${{ env.APPLE_KEY_FILE_NAME }}
-          APPLE_KEY: ${{ env.APPLE_KEY }}
-          GOOGLE_KEY_DIST_PATH: ${{ env.GOOGLE_KEY_DIST_PATH }}
-          GOOGLE_FIREBASE_KEY_FILE_NAME: ${{ env.GOOGLE_FIREBASE_KEY_FILE_NAME }}
-          GOOGLE_FIREBASE_KEY: ${{ env.GOOGLE_FIREBASE_KEY }}
-          GOOGLE_DIALOGFLOW_KEY_FILE_NAME: ${{ env.GOOGLE_DIALOGFLOW_KEY_FILE_NAME }}
-          GOOGLE_DIALOGFLOW_KEY: ${{ env.GOOGLE_DIALOGFLOW_KEY }}
 
       # Step 2: Validate source code
       - name: Validate source code
