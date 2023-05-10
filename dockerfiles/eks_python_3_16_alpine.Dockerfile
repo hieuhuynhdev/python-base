@@ -19,10 +19,6 @@ COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source to image:
-# --- dataFiles/
-# --- service_keys/
-# --- services/
-COPY ./dataFiles ./dataFiles
-COPY ./service_keys ./service_keys
+# --- services
 COPY ./services ./services
 
