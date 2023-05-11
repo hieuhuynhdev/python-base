@@ -16,4 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source to image:
 # --- services
 COPY ./services ./services
+COPY ./.env ./.env
 
